@@ -1,0 +1,18 @@
+{
+    "name": "Jane Doe",
+    "age": 29,
+    "email": "jane.doe@example.com",
+    "skills": ["Python", "Game Development", "AI"],
+    "projects": [
+        {
+            "title": "AI Chatbot",
+            "year": 2024,
+            "technologies": ["OpenAI API", "Python", "Bubble.io"]
+        },
+        {
+            "title": "Indie Game",
+            "year": 2025,
+            "technologies": ["Unity", "C#", "Blender"]
+        }
+    ]
+}
