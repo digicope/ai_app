@@ -2,6 +2,6 @@
 
 <br>
 #### [1] OpenAI API 키 발급 <br>
-https://platform.openai.com/docs/overview
+https://platform.openai.com/
 
 <br>
