@@ -6,3 +6,6 @@
 https://platform.openai.com/
 
 <br>
+
+#### [2] promptingguide <br>
+https://www.promptingguide.ai/kr/techniques
