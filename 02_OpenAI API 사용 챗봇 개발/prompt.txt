@@ -14,3 +14,33 @@ def search_documents(query):
     relevant_docs = [doc for doc in documents if query.lower() in doc.lower()]
     
     return relevant_docs
+
+def generate_answer(query, documents):
+    # 검색된 문서를 바탕으로 답변 생성
+    combined_context = "\n".join(documents)
+    prompt = f"질문: {query}\n\n문서:\n{combined_context}\n\n답변:"
+    
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+                {"role": "user", 
+                 "content": prompt}
+                ],
+        max_tokens=100,
+        temperature=0.5
+    )
+    
+    return response.choices[0].message.content
+
+# query = "OpenAI는 무엇인가요?"
+# query = "GPT-4는 무엇인가요?"
+query = "RAG는 무엇인가요?"
+
+# 1. 문서 검색
+documents = search_documents(query)
+
+# 2. 답변 생성
+answer = generate_answer(query, documents)
+
+print("질문:", query)
+print("답변:", answer)
