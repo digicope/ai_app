@@ -1,46 +1,27 @@
-def search_documents(query):
-    # 이 함수는 문서를 검색하는 역할을 합니다.
-    # 실제로는 외부 검색 엔진이나 데이터베이스에 쿼리를 보내야 하지만,
-    # 이 예제에서는 간단히 미리 정의된 문서를 반환합니다.
-    
-    # 예제 문서
-    documents = [
-        "OpenAI는 인공지능 연구소로, 다양한 AI 기술을 개발합니다.",
-        "GPT-4는 OpenAI에서 개발한 언어 모델로, 자연어 처리를 위한 강력한 도구입니다.",
-        "RAG는 정보 검색과 텍스트 생성을 결합하여 더 나은 결과를 제공합니다."
-    ]
-    
-    # 간단한 검색 논리: 입력 쿼리와 관련된 문서 필터링
-    relevant_docs = [doc for doc in documents if query.lower() in doc.lower()]
-    
-    return relevant_docs
+# 문서 사전 참조 : 환각 현상 방지
+system_role = """
+신조어 사전:
+{"스불재": "스스로 불러온 재앙의 줄임말로, 자신이 만든 문제로 곤란한 상황에 처했을 때 사용"
+"억까": "억지로 까기의 줄임말로, 근거 없이 비판하거나 비난하는 상황을 말함"
+"존맛탱": "존맛과 탱의 합성어로, 매우 맛있는 음식을 뜻함"
+"어쩔티비": "상대방의 말을 무시하거나 별다른 대응을 하지 않겠다는 의미로, 주로 장난스럽게 사용된다"
+"복세편살": "복잡한 세상 편하게 살자의 줄임말로, 복잡한 인생을 간단하게 살자는 의미"
+"알잘딱깔센":"알아서 잘, 딱, 깔끔하고 센스 있게의 줄임말로, 어떤 일을 척척 잘 해내는 사람을 칭찬할 때 쓰임"}
 
-def generate_answer(query, documents):
-    # 검색된 문서를 바탕으로 답변 생성
-    combined_context = "\n".join(documents)
-    prompt = f"질문: {query}\n\n문서:\n{combined_context}\n\n답변:"
-    
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-                {"role": "user", 
-                 "content": prompt}
-                ],
-        max_tokens=100,
-        temperature=0.5
-    )
-    
-    return response.choices[0].message.content
+이 신조어 사전을 참조하여 답변하세요. 만일 이 신조어 사전에 없으면 "모르는 단어입니다"라고 답하세요."
+"""
+# "점메추": "점심 메뉴 추천의 줄임말로, 점심에 무엇을 먹을지 고민할 때 사용"
+# "킹받다": "열받다의 변형 표현으로, 아주 화가 나거나 짜증이 날 때 사용"
+# "갓생": "신처럼 성실하고 부지런하게 사는 삶을 의미하며, 목표를 향해 최선을 다하는 삶을 칭찬할 때 사용"
 
-# query = "OpenAI는 무엇인가요?"
-# query = "GPT-4는 무엇인가요?"
-query = "RAG는 무엇인가요?"
-
-# 1. 문서 검색
-documents = search_documents(query)
-
-# 2. 답변 생성
-answer = generate_answer(query, documents)
-
-print("질문:", query)
-print("답변:", answer)
+prompt = "신조어 {신조어}의 뜻을 말해주세요.".format(신조어="어쩔티비")
+context = [{"role": "system", "content": system_role},
+           {"role": "user", "content": prompt}] 
+response = client.chat.completions.create(
+            model="gpt-4o-mini", 
+            # model="gpt-3.5-turbo",
+            messages=context,
+            temperature=0,
+            top_p=0
+        )
+print(response.choices[0].message.content)
