@@ -1,44 +1,8 @@
-def generate_thoughts(prompt, n=3):
-    """
-    GPT를 사용하여 주어진 프롬프트에 대해 여러 가지 생각(아이디어)을 생성하는 함수.
-    """
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt}
-        ],
-        n=n,  # 생성할 생각(아이디어)의 수
-        max_tokens=100  # 각 응답의 최대 길이
-    )
-    thoughts =  [choice.message.content for choice in response.choices]
-    return thoughts
+#### <br>
+## Retrieval Augmented Generation (RAG)
+RAG의 기본 개념:
+Retrieval (검색): 먼저, 특정 질문이나 문장에 대해 관련성이 높은 문서나 정보를 대규모 데이터베이스에서 검색합니다. 이 단계는 전통적인 정보 검색 시스템이나 특수한 인코더 모델(BERT와 같은 트랜스포머 기반 모델)을 사용하여 수행됩니다. 검색된 문서들은 후속 생성 과정의 입력으로 사용됩니다.
 
-# 함수는 초기 생각들을 생성한 후, 각 생각에 대해 더 깊이 탐색하는 과정을 거칩니다.
-# 더 깊이 탐색한 결과 중 길이가 가장 긴 응답을 최적의 생각으로 선택
-def tree_of_thoughts(prompt, depth=2):
-    """
-    Tree of Thoughts 방식을 사용하여 최적의 생각을 찾는 함수.
-    """
-    initial_thoughts = generate_thoughts(prompt)
-    print(f"Initial thoughts:\n{initial_thoughts}\n")
+Augmentation (증강): 검색된 문서나 정보를 사용하여 입력된 질문이나 문장을 보강합니다. 즉, 검색된 관련 정보가 모델의 입력으로 주어지며, 이는 생성 모델이 더 나은 텍스트를 생성할 수 있도록 도와줍니다.
 
-    best_thought = None
-    for i, thought in enumerate(initial_thoughts):
-        print(f"Exploring thought {i + 1}: {thought}")
-        next_prompt = f"{thought} 다음에 어떻게 할 수 있을까요?"
-        deeper_thoughts = generate_thoughts(next_prompt)
-
-        # 간단한 평가 방법: 길이가 가장 긴 응답을 최선으로 선택
-        best_deeper_thought = max(deeper_thoughts, key=len)
-        print(f"Deeper thought: {best_deeper_thought}\n")
-
-        # 최적의 생각 갱신
-        if not best_thought or len(best_deeper_thought) > len(best_thought):
-            best_thought = best_deeper_thought
-
-    print(f"Best thought: {best_thought}")
-
-# 사용 예제
-user_prompt = "자연을 보존하기 위한 창의적인 아이디어가 무엇일까요?"
-tree_of_thoughts(user_prompt)
+Generation (생성): 마지막으로, 검색된 정보를 바탕으로 주어진 질문에 대한 답변이나 설명을 생성합니다. 이 단계에서 GPT 생성 모델이 사용될 수 있으며, 검색된 정보가 포함되어 보다 정확하고 풍부한 응답을 생성할 수 있습니다.
