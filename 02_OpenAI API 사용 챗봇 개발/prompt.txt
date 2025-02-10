@@ -1,23 +1,10 @@
-prompt_1 = f"{product_idea}의 핵심 기능과 그 기능들이 어떻게 사용자에게 가치를 제공할 수 있는지 설명해줘. 이 제품이 기존 시장에서 어떤 문제를 해결하는지에 대해 강조해줘."
+## Tree of Thoughts (ToT)
+: **Tree of Thoughts (ToT)**는 대규모 언어 모델(LLM)이 복잡한 문제를 해결하기 위해 다양한 아이디어를 생성하고 평가하는 과정을 시뮬레이션하는 새로운 방법입니다. 마치 사람이 문제에 대한 해결책을 찾기 위해 마음속으로 여러 가지 가능성을 떠올리고 그중 가장 적절한 것을 선택하는 것과 유사합니다. <br>
+### ToT가 작동하는 방식
+생각의 나무(Tree of Thoughts): 문제를 해결하기 위한 다양한 아이디어와 접근 방식을 가지(branches)로 확장시키는 나무 구조로 표현합니다. 각 가지는 다양한 사고의 흐름을 나타냅니다.
 
-prompt_2 = f"{product_summary}을 바탕으로, 이 제품의 주요 타겟 고객이 어떤 요구사항을 가지고 있는지 분석해줘. 이 고객들이 제품을 사용하면서 겪을 수 있는 주요 문제와 기대되는 기능을 설명해줘."
+탐색 과정: 나무의 뿌리(root)에서 시작하여 각 가지를 따라가며 가능한 해결 방법들을 평가하고, 최적의 해결책을 찾는 과정을 탐색이라고 합니다. 이 과정에서 여러 가지 경로를 비교하고, 실패하거나 비효율적인 경로는 가지치기(pruning)하여 제거합니다.
 
-prompt_3 = f"{customer_requirements}을 기반으로, 이 제품을 성공적으로 출시하기 위한 전략을 제안해줘. 특히, 마케팅 전략과 고객 피드백을 반영하는 방법에 대해 자세히 설명해줘."
+분기와 평가: 문제를 해결하는 다양한 경로를 탐색하는 중간 중간에 각 경로가 얼마나 유망한지 평가하고, 유망한 경로를 더 깊이 탐색하며 문제 해결에 접근합니다.]
 
-#### <br>
-## Prompt Chaining (프롬프트 연쇄)
-: 복잡한 문제를 해결하기 위해 여러 단계를 거쳐 연속적으로 프롬프트를 작성하는 방법
-https://devocean.sk.com/blog/techBoardDetail.do?ID=166026&boardType=techBlog
-
-def ask_openai(prompt, max_tokens=150):
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        max_tokens=max_tokens,
-        messages=[
-                {"role": "user", 
-                 "content": prompt}
-                ]
-    )
-    return response.choices[0].message.content
-
-
+![image](https://www.promptingguide.ai/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FTOT.3b13bc5e.png&w=1200&q=75)
