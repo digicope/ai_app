@@ -25,3 +25,14 @@ response = client.chat.completions.create(
             top_p=0
         )
 print(response.choices[0].message.content)
+
+prompt = "신조어 {신조어}의 뜻을 말해주세요.".format(신조어="스불재")
+context = [{"role": "user", "content": prompt}] 
+response = client.chat.completions.create(
+            # model="gpt-4o-mini", 
+            model="gpt-3.5-turbo",
+            messages=context,
+            temperature=0,
+            top_p=0
+        )
+print(response.choices[0].message.content)
