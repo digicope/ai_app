@@ -1,3 +1,19 @@
+def generate_thoughts(prompt, n=3):
+    """
+    GPT를 사용하여 주어진 프롬프트에 대해 여러 가지 생각(아이디어)을 생성하는 함수.
+    """
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        n=n,  # 생성할 생각(아이디어)의 수
+        max_tokens=100  # 각 응답의 최대 길이
+    )
+    thoughts =  [choice.message.content for choice in response.choices]
+    return thoughts
+
 ## Tree of Thoughts (ToT)
 : **Tree of Thoughts (ToT)**는 대규모 언어 모델(LLM)이 복잡한 문제를 해결하기 위해 다양한 아이디어를 생성하고 평가하는 과정을 시뮬레이션하는 새로운 방법입니다. 마치 사람이 문제에 대한 해결책을 찾기 위해 마음속으로 여러 가지 가능성을 떠올리고 그중 가장 적절한 것을 선택하는 것과 유사합니다. <br>
 ### ToT가 작동하는 방식
