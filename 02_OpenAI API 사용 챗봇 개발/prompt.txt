@@ -1,3 +1,19 @@
+def generate_thoughts(prompt, n=3):
+    """
+    GPT를 사용하여 주어진 프롬프트에 대해 여러 가지 생각(아이디어)을 생성하는 함수.
+    """
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        n=n,  # 생성할 생각(아이디어)의 수
+        max_tokens=100  # 각 응답의 최대 길이
+    )
+    thoughts =  [choice.message.content for choice in response.choices]
+    return thoughts
+
 # 함수는 초기 생각들을 생성한 후, 각 생각에 대해 더 깊이 탐색하는 과정을 거칩니다.
 # 더 깊이 탐색한 결과 중 길이가 가장 긴 응답을 최적의 생각으로 선택
 def tree_of_thoughts(prompt, depth=2):
