@@ -3,3 +3,15 @@
 : 복잡한 문제를 해결하기 위해 여러 단계를 거쳐 연속적으로 프롬프트를 작성하는 방법
 https://devocean.sk.com/blog/techBoardDetail.do?ID=166026&boardType=techBlog
 
+def ask_openai(prompt, max_tokens=150):
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        max_tokens=max_tokens,
+        messages=[
+                {"role": "user", 
+                 "content": prompt}
+                ]
+    )
+    return response.choices[0].message.content
+
+
