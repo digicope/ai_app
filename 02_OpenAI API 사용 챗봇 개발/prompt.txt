@@ -1,9 +1,6 @@
-# 테이블 생성: conversations라는 테이블을 생성. id는 기본 키이며 자동으로 증가합니다. 
-# question, answer 컬럼(스키마)을 정의
+# 데이터 삽입 : conversations 테이블에 데이터를 삽입 
+# ?는 자리표시자(placeholder)로, 실제 값은 튜플로 전달된다.
+
 c.execute('''
-    CREATE TABLE IF NOT EXISTS conversations (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        question TEXT,
-        answer TEXT
-    )
-''')
+    INSERT INTO conversations (question, answer) VALUES (?, ?)
+''', (question, answer))
