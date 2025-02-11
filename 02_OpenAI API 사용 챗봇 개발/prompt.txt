@@ -1,8 +1,104 @@
-def generate_response(user_message):
-    # 여기에서 더 복잡한 로직이나 모델을 사용할 수 있습니다.
-    if "hello" in user_message.lower():
-        return "Hi there! How can I help you today?"
-    elif "bye" in user_message.lower():
-        return "Goodbye! Have a nice day!"
-    else:
-        return "I'm sorry, I don't understand that."
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        #chatbox {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message.user {
+            text-align: right;
+            color: blue;
+        }
+        .message.bot {
+            text-align: left;
+            color: green;
+        }
+        #user-input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #send-button {
+            width: 18%;
+            padding: 10px;
+            background-color: #28a745;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chatbox">
+    <div id="messages"></div>
+    <input type="text" id="user-input" placeholder="Type your message here...">
+    <button id="send-button">Send</button>
+</div>
+
+<script>
+    document.getElementById("send-button").onclick = function() {
+        var userInput = document.getElementById("user-input").value;
+        if (userInput.trim() === "") {
+            return;
+        }
+        
+        // 사용자 메시지를 화면에 추가
+        var userMessageElement = document.createElement("div");
+        userMessageElement.className = "message user";
+        userMessageElement.textContent = userInput;
+        document.getElementById("messages").appendChild(userMessageElement);
+
+        // 서버로 사용자 메시지 전송
+        fetch('/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: userInput })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 서버의 응답을 화면에 추가
+            var botMessageElement = document.createElement("div");
+            botMessageElement.className = "message bot";
+            botMessageElement.textContent = data.response;
+            document.getElementById("messages").appendChild(botMessageElement);
+        });
+
+        // 입력 필드 초기화
+        document.getElementById("user-input").value = "";
+    };
+</script>
+
+</body>
+</html>
