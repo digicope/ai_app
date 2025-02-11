@@ -1,83 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고객 서비스 챗봇</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #chatbox {
-            width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-        }
-        #messages {
-            height: 300px;
-            overflow-y: scroll;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-        }
-        #userInput {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        #sendButton {
-            padding: 10px 20px;
-            margin-top: 10px;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div id="chatbox">
-        <h2>챗GPT 고객 서비스 챗봇 v1.0 [By GBH]</h2>
-        <div id="messages"></div>
-        <input type="text" id="userInput" placeholder="Type your message here...">
-        <button id="sendButton">보내기</button>
-    </div>
-
-    <script>
-        $(document).ready(function(){
-            $("#sendButton").click(function(){
-                var userMessage = $("#userInput").val();
-                if(userMessage) {
-                    $("#messages").append("<div><b>You:</b> " + userMessage + "</div>");
-                    $("#userInput").val("");
-
-                    $.ajax({
-                        url: "/get_response",
-                        type: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify({"message": userMessage}),
-                        success: function(response) {
-                            $("#messages").append("<div><b>Bot:</b> " + response.response + "</div>");
-                        }
-                    });
-                }
-            });
-
-            $("#userInput").keypress(function(e) {
-                if(e.which == 13) {
-                    $("#sendButton").click();
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+# 테이블 생성: conversations라는 테이블을 생성. id는 기본 키이며 자동으로 증가합니다. 
+# question, answer 컬럼(스키마)을 정의
+c.execute('''
+    CREATE TABLE IF NOT EXISTS conversations (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        question TEXT,
+        answer TEXT
+    )
+''')
