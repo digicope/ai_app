@@ -1,2 +1,93 @@
-## ReAct(Reasoning & Acting) 
-: 논리적 추론(Reasoning)과 행동(Acting)을 결합하여 더 복잡하고 정교한 응답을 생성하도록 하는 프롬프트 설계 기법
+# 간단한 영화 데이터베이스 예시
+movie_database = {
+    "액션": ["매드 맥스: 분노의 도로", "다크 나이트", "글래디에이터"],
+    "코미디": ["슈퍼배드", "덤 앤 더머", "미스터 빈"],
+    "로맨스": ["타이타닉", "노트북", "라라랜드"],
+    "SF": ["인터스텔라", "인셉션", "매트릭스"]
+}
+
+def recommend_movies(genre):
+    """
+    장르를 입력받아 해당 장르의 영화를 추천하는 함수.
+    """
+    return movie_database.get(genre, [])
+
+def react_prompt(query):
+    """
+    사용자의 질의를 바탕으로 추론하고, 영화 추천을 수행하는 ReAct 패턴 함수.
+    """
+    # 1. 모델에게 문제를 설명하고 추론을 요구하는 프롬프트 생성
+    prompt = f"""
+    문제: {query}
+
+    단계 1: 사용자의 선호도를 분석하고 필요한 정보를 식별하세요.
+    단계 2: 필요한 정보를 가져와 문제를 해결하세요.
+    단계 3: 최종 영화 추천을 제공하세요.
+    
+    추론:
+    """
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+                {"role": "user", 
+                 "content": prompt}
+                ],
+        max_tokens=150,
+        temperature=0.5
+    )
+
+    reasoning = response.choices[0].message.content
+
+    # 2. 추론을 통해 필요한 행동을 결정
+    if "액션" in query:
+        genre = "액션"
+    elif "코미디" in query:
+        genre = "코미디"
+    elif "로맨스" in query:
+        genre = "로맨스"
+    elif "SF" in query:
+        genre = "SF"
+    else:
+        genre = None
+    
+    if genre:
+        action_result = recommend_movies(genre)
+        action_result_text = f"{genre} 장르의 추천 영화는: {', '.join(action_result)}입니다."
+    else:
+        action_result_text = "추천할 영화 장르를 찾을 수 없습니다."
+
+    # 3. 최종 결과를 생성하는 프롬프트
+    final_prompt = f"""
+    문제: {query}
+
+    추론: {reasoning}
+
+    행동 결과: {action_result_text}
+
+    최종 답변:
+    """
+
+    final_response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+                {"role": "user", 
+                 "content": final_prompt}
+                ],
+        #max_tokens=200,
+        temperature=0.5
+    )
+
+    return final_response.choices[0].message.content
+
+def main():
+    query = "액션 영화를 추천해줘"
+
+    # ReAct 패턴을 사용하여 답변 생성
+    answer = react_prompt(query)
+    
+    print("질문:", query)
+    print("답변:", answer)
+
+if __name__ == "__main__":
+    main()
