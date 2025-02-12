@@ -1,0 +1,32 @@
+<!-- templates/history.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation History</title>
+</head>
+<body>
+    <h1>Conversation History</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Question</th>
+                <th>Answer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conversation in conversations %}
+            <tr>
+                <td>{{ conversation[0] }}</td>
+                <td>{{ conversation[1] }}</td>
+                <td>{{ conversation[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <hr>
+    <a href="/">Back to Chat</a>
+</body>
+</html>
