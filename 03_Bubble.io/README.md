@@ -1,6 +1,10 @@
 ### 03_Bubble.io
 <br>
 
+#### 강사 앱 공유(실습 답안,읽기 전용)
+https://bubble.io/page?id=test-app-86496&tab=Design
+<br>
+
 #### bubble.io 홈페이지
 https://bubble.io
 <br>
